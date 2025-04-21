@@ -5,13 +5,14 @@ from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 # Commande /start
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     username = update.effective_user.username
+    balance = 00.00  # Tu peux le rendre dynamique si besoin
 
     message = (
         f"👋 Hey, @{username} !\n"
         f"🇫🇷 Vous êtes actuellement sur le meilleur AUTOSHOP de data fr 🇫🇷.\n\n"
+        f"🇫🇷 Dépôt doublé tout les lundi 🇫🇷\n"
         f"🔄 Split BOT : https://t.me/RAVVFR\n"
         f"⚡ Dépot Crypto instant BTC/ETH/SOL ... go dm\n"
-        f"📩 @suareZ3\n\n"
         f"💰 Solde: {balance:.2f}€"
     )
 
