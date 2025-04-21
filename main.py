@@ -34,6 +34,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(message, reply_markup=reply_markup)
 
 # Lancer le bot
+import os
 app = ApplicationBuilder().token(os.environ["8179818961:AAEPH9b6ltprKM7L7bjO7EuVAxfEVmGOlQE"]).build()
 app.add_handler(CommandHandler("start", start))
 app.run_polling()
