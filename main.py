@@ -7,7 +7,7 @@ from telegram.ext import ApplicationBuilder, CommandHandler, CallbackQueryHandle
 user_balances = {}
 
 # Liste des admins (remplace TON_ID_ADMIN par ton ID Telegram)
-ADMIN_IDS = [123456789]  # ← ton ID Telegram ici
+ADMIN_IDS = [@suareZ3]  # ← ton ID Telegram ici
 
 # Commande /start
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
