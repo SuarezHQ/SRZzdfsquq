@@ -1,7 +1,5 @@
-import os
-import logging
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
+from telegram.ext import ApplicationBuilder, CommandHandler, CallbackQueryHandler, ContextTypes
 
 user_balances = {}
 
@@ -16,30 +14,39 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     message = (
         f"👋 Hey, @{username} !\n"
-        f"🇫🇷 Vous êtes actuellement sur le meilleur AUTOSHOP de data fr 🇫🇷.\n\n"
-        f"🇫🇷 Dépôt doublé tout les lundi 🇫🇷\n"
-        f"🔄 Split BOT : https://t.me/RAVVFR\n"
-        f"⚡ Dépot Crypto instant BTC/ETH/SOL ... go dm\n"
-        f"💰 Solde: {balance:.2f}€"
+        f"🇫🇷 Bienvenue sur le meilleur AUTOSHOP 🇫🇷\n\n"
+        f"💰 Solde: {balance:.2f}€\n"
+        f"👇 Choisissez une option :"
     )
 
     keyboard = [
-        [InlineKeyboardButton("💰 Depot Crypto 30m~", url="https://t.me/toncontactcrypto")],
-        [InlineKeyboardButton("📄 Canal", url="https://t.me/toncanal")],
-        [InlineKeyboardButton("👤 Profile", callback_data='profile'),
-         InlineKeyboardButton("🛍️ Shop", callback_data='shop')]
+        [InlineKeyboardButton("💰 Dépôt Crypto 30m~", callback_data='deposit_menu')],
+        [InlineKeyboardButton("📄 Canal", url="https://t.me/ton_canal_telegram")],
+        [InlineKeyboardButton("🛍️ Shop", callback_data='shop_menu')]
     ]
-    reply_markup = InlineKeyboardMarkup(keyboard)
+    await update.message.reply_text(message, reply_markup=InlineKeyboardMarkup(keyboard))
 
-    await update.message.reply_text(message, reply_markup=reply_markup)
+# Dépôt menu crypto
+async def handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    await query.answer()
 
-if __name__ == '__main__':
-    logging.basicConfig(level=logging.INFO)
+    if query.data == 'deposit_menu':
+        keyboard = [
+            [InlineKeyboardButton("🟣 ETH", url="https://t.me/contact_eth")],
+            [InlineKeyboardButton("🔙 Retour", callback_data='back_to_main')]
+        ]
+        await query.edit_message_text("💸 Choisissez votre crypto :", reply_markup=InlineKeyboardMarkup(keyboard))
 
-    TOKEN = os.environ["BOT_TOKEN"]
-    app = ApplicationBuilder().token(TOKEN).build()
+    elif query.data == 'shop_menu':
+        shop_text = (
+            "🛍️ *DATA SHOP :*\n"
+            "- 🇫🇷 DATA : 10€\n"
+            "- + d'autres sur demande"
+        )
+        keyboard = [[InlineKeyboardButton("🔙 Retour", callback_data='back_to_main')]]
+        await query.edit_message_text(shop_text, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode="Markdown")
 
-    app.add_handler(CommandHandler("start", start))
+    elif query.data == 'back_to_main':
+        await start(update, context)
 
-    print("Bot en ligne en mode polling ✅")
-    app.run_polling()
