@@ -1,16 +1,14 @@
 import os
+import logging
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
-# Simule une base de données des soldes utilisateurs
 user_balances = {}
 
-# Commande /start
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
     username = update.effective_user.username or "Utilisateur"
 
-    # Si l'utilisateur n'a pas encore de solde, on initialise à 0
     if user_id not in user_balances:
         user_balances[user_id] = 0.00
 
@@ -35,15 +33,19 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await update.message.reply_text(message, reply_markup=reply_markup)
 
-# Lancement du bot
 if __name__ == '__main__':
-    import logging
     logging.basicConfig(level=logging.INFO)
 
     TOKEN = os.environ["BOT_TOKEN"]
-    app = ApplicationBuilder().token(TOKEN).build()
+    WEBHOOK_URL = os.environ["WEBHOOK_URL"]
+    PORT = int(os.environ.get("PORT", 8443))  # Render fournit ça automatiquement
 
+    app = ApplicationBuilder().token(TOKEN).build()
     app.add_handler(CommandHandler("start", start))
 
-    print("Bot en ligne ✅")
-    app.run_polling()
+    print("Bot en ligne avec Webhook ✅")
+    app.run_webhook(
+        listen="0.0.0.0",
+        port=PORT,
+        webhook_url=f"{WEBHOOK_URL}/{TOKEN}"
+    )
