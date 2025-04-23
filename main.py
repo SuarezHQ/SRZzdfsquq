@@ -21,7 +21,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     keyboard = [
         [InlineKeyboardButton("💰 Dépôt Crypto 30m~", callback_data='deposit_menu')],
-        [InlineKeyboardButton("📄 Canal", url="https://t.me/ton_canal_telegram")],
+        [InlineKeyboardButton("📄 Canal", url="https://t.me/RAVVFR")],
         [InlineKeyboardButton("🛍️ Shop", callback_data='shop_menu')]
     ]
     await update.message.reply_text(message, reply_markup=InlineKeyboardMarkup(keyboard))
