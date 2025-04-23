@@ -37,8 +37,8 @@ if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
 
     TOKEN = os.environ["BOT_TOKEN"]
-    
-    PORT = int(os.environ.get("PORT", 8443))  # Render fournit ça automatiquement
+    WEBHOOK_URL = os.environ["WEBHOOK_URL"]
+    PORT = int(os.environ.get("PORT", 8443))
 
     app = ApplicationBuilder().token(TOKEN).build()
     app.add_handler(CommandHandler("start", start))
@@ -47,5 +47,5 @@ if __name__ == '__main__':
     app.run_webhook(
         listen="0.0.0.0",
         port=PORT,
-        =f"{}/{TOKEN}"
+        webhook_url=f"{WEBHOOK_URL}/{TOKEN}"
     )
