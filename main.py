@@ -37,15 +37,9 @@ if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
 
     TOKEN = os.environ["BOT_TOKEN"]
-    WEBHOOK_URL = os.environ["WEBHOOK_URL"]
-    PORT = int(os.environ.get("PORT", 8443))
-
     app = ApplicationBuilder().token(TOKEN).build()
+
     app.add_handler(CommandHandler("start", start))
 
-    print("Bot en ligne avec Webhook ✅")
-    app.run_webhook(
-        listen="0.0.0.0",
-        port=PORT,
-        webhook_url=f"{WEBHOOK_URL}/{TOKEN}"
-    )
+    print("Bot en ligne en mode polling ✅")
+    app.run_polling()
